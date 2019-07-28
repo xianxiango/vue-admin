@@ -1,593 +1,423 @@
 <template>
   <div class="public-view">
-    <!-- <el-row :gutter="40">
-      <el-col :span="8">
-        <el-card class="box-card counts2">
-          <div class="counts-header">
-            <div class="counts-header-left">
-              <svg-icon class="counts-header-svg" icon-class="example"></svg-icon>
-            </div>
-            <div class="counts-header-right">
-              <h2>{{balance.BTC}}</h2>
-              <p>BTC钱包余额</p>
-            </div>
-          </div>
-          <a
-            :href="`${this.addressPath['BTC'].Address}${this.btc_account}`"
-            target="_blank"
-          >{{this.btc_account}}</a>
-        </el-card>
-      </el-col>
-      <el-col :span="8">
-        <el-card class="box-card counts3">
-          <div class="counts-header">
-            <div class="counts-header-left">
-              <svg-icon class="counts-header-svg" icon-class="example"></svg-icon>
-            </div>
-            <div class="counts-header-right">
-              <h2>{{balance.ETH}}</h2>
-              <p>ETH钱包余额</p>
-            </div>
-            <div class="counts-header-right">
-              <h2>{{this.eth_block}}</h2>
-              <p>ETH区块高度</p>
-            </div>
-          </div>
-          <a
-            :href="`${this.addressPath['ETH'].Address}${this.eth_account}`"
-            target="_blank"
-          >{{this.eth_account}}</a>
-        </el-card>
-      </el-col>
-      <el-col :span="8">
-        <el-card class="box-card counts4">
-          <div class="counts-header">
-            <div class="counts-header-left">
-              <svg-icon class="counts-header-svg" icon-class="example"></svg-icon>
-            </div>
-            <div class="counts-header-right">
-              <h2>{{balance.USDT}}</h2>
-              <p>USDT钱包余额</p>
-            </div>
-            <div class="counts-header-right">
-              <h2>{{balance.BTC_FEE}}</h2>
-              <p>BTC余额</p>
-            </div>
-          </div>
-          <a
-            :href="`${this.addressPath['USDT'].Address}${this.usdt_account}`"
-            target="_blank"
-          >{{this.usdt_account}}</a>
-        </el-card>
-      </el-col>
-    </el-row>
-    <el-row :gutter="40" style="margin-top: 30px;">
-      <el-col :span="8">
-        <el-card class="box-card counts4">
-          <div class="counts-header">
-            <div class="counts-header-left">
-              <svg-icon class="counts-header-svg" icon-class="example"></svg-icon>
-            </div>
-            <div class="counts-header-right">
-              <h2>{{balance.EOS}}</h2>
-              <p>EOS钱包余额</p>
-            </div>
-            <div class="counts-header-right">
-              <h2>{{balance.TD}}</h2>
-              <p>TD余额</p>
-            </div>
-          </div>
-          <a
-            :href="`${this.addressPath['EOS'].Address}${this.eos_account}`"
-            target="_blank"
-          >{{this.eos_account}}</a>
-        </el-card>
-      </el-col>
-      <el-col :span="8">
-        <el-card class="box-card counts2">
-          <div class="counts-header">
-            <div class="counts-header-left">
-              <svg-icon class="counts-header-svg" icon-class="example"></svg-icon>
-            </div>
-            <div class="counts-header-right">
-              <h2>{{balance.LTC}}</h2>
-              <p>LTC钱包余额</p>
-            </div>
-          </div>
-          <a
-            :href="`${this.addressPath['LTC'].Address}${this.ltc_account}`"
-            target="_blank"
-          >{{this.ltc_account}}</a>
-        </el-card>
-      </el-col>
-      <el-col :span="8">
-        <el-card class="box-card counts3">
-          <div class="counts-header">
-            <div class="counts-header-left">
-              <svg-icon class="counts-header-svg" icon-class="example"></svg-icon>
-            </div>
-            <div class="counts-header-right">
-              <h2>{{balance.BCHABC}}</h2>
-              <p>BCHABC钱包余额</p>
-            </div>
-          </div>
-          <a
-            :href="`${this.addressPath['BCHABC'].Address}${this.bch_account}`"
-            target="_blank"
-          >{{this.bch_account}}</a>
-        </el-card>
-      </el-col>
-    </el-row>
-    <el-row :gutter="40" style="margin-top: 30px;">
-      <el-col :span="8">
-        <el-card class="box-card counts3">
-          <div class="counts-header">
-            <div class="counts-header-left">
-              <svg-icon class="counts-header-svg" icon-class="example"></svg-icon>
-            </div>
-            <div class="counts-header-right">
-              <h2>{{balance["USDT-ERC20"]}}</h2>
-              <p>USDT-ERC20钱包余额</p>
-            </div>
-          </div>
-          <a
-            :href="`${this.addressPath['USDT-ERC20'].Address}${this.eth_account}`"
-            target="_blank"
-          >{{this.eth_account}}</a>
-        </el-card>
-      </el-col>
-    </el-row>-->
-    <el-card class="asset-card" style="margin-top: 40px;">
-      <h4 style="margin-bottom:20px">自动钱包信息</h4>
-      <div class="user-table">
-        <el-table :data="wallet" border>
-          <el-table-column prop="Currency" label="币种" fixed="left"></el-table-column>
-          <el-table-column prop="Address" label="地址" width="400">
-            <template slot-scope="scope">
-              <a
-                :href="`${addressPath[scope.row.Currency].Address}${scope.row.Address}`"
-                target="_blank"
-              >{{scope.row.Address}}</a>
-            </template>
-          </el-table-column>
-          <!-- <el-table-column prop="Address" label="地址"></el-table-column> -->
-          <el-table-column prop="Balance" label="余额"></el-table-column>
-          <el-table-column prop="Commission" label="手续费余额"></el-table-column>
-          <el-table-column prop="Limit" label="自动提现限额"></el-table-column>
-        </el-table>
+    <!-- 头部  -->
+    <div class="view-header">
+      <div class="header-left">
+        <el-button type="primary" icon="el-icon-circle-plus-outline" @click="createVisible = true">新建</el-button>
+        <span class="left-span">
+          <span>状态：</span>
+          <el-select style="width: 100px;" v-model="filterValue" placeholder="请选择" @change="filterStatus">
+            <el-option label="全部" :value="-1"></el-option>
+            <el-option label="显示" :value="1"></el-option>
+            <el-option label="隐藏" :value="0"></el-option>
+          </el-select>
+        </span>
       </div>
-    </el-card>
-    <el-row :gutter="40" style="margin-top: 30px;">
-      <el-col :span="8">
-        <el-card class="box-card counts1">
-          <div class="counts-header">
-            <div class="counts-header-left">
-              <svg-icon class="counts-header-svg" icon-class="people"></svg-icon>
-            </div>
-            <div class="counts-header-right">
-              <h2>
-                <vue-count :startVal="0" :endVal="newUser" :duration="2000"></vue-count>
-              </h2>
-              <p>新增用户</p>
-            </div>
+    </div>
+    <!-- 表格  -->
+    <el-table class="public-table" :data="list" border v-loading="loading" show-summary @selection-change="handleSelectionChange" :summary-method="getSummaries">
+      <el-table-column type="selection" width="60"></el-table-column>
+      <el-table-column :prop="item.name" v-if="item.value" :key="item.name" v-for="item in dynamicTable" :label="item.label" :show-overflow-tooltip="true">
+        <template slot-scope="scope">
+          <span v-if="item.name === 'Show'">
+            <el-tag v-if="!scope.row.Show" type="danger">已隐藏</el-tag>
+            <el-tag v-else type="success">已显示</el-tag>
+          </span>
+          <span v-else-if="item.name === 'Platform'">
+            <el-tag style="margin-right:10px" type="info" v-for="child in scope.row[item.name]" :key="child">{{platformType[child]}}</el-tag>
+          </span>
+          <span v-else>
+            <span v-if="scope.row[item.name]!=0">{{scope.row[item.name]}}</span><span v-if="scope.row[item.name]==0">-</span>
+          </span>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" align="center" width="240">
+        <template slot-scope="scope">
+          <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+          <el-button v-if="!scope.row.Show" size="mini" type="primary" @click="handleUnEnable(scope.$index, scope.row)">显示</el-button>
+          <el-button v-else size="mini" type="danger" @click="handleUnEnable(scope.$index, scope.row)">隐藏</el-button>
+          <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <!-- 分页  -->
+    <el-pagination background @size-change="handleSize" @current-change="handlePage" :current-page="page" :page-sizes="sizeList" :page-size="size" :total="total" layout="total, sizes, prev, pager, next, jumper">
+    </el-pagination>
+    <!-- 新建广告  -->
+    <el-dialog :close-on-click-modal="false" :visible.sync="createVisible" @close="closeCreate" width="800px" top="30px">
+      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="120px" class="demo-ruleForm" style="padding-right: 55px;">
+        <el-form-item label="标题：" prop="title">
+          <el-input v-model="ruleForm.title" placeholder="请输入活动标题"></el-input>
+        </el-form-item>
+        <el-form-item label="语言：" prop="lang">
+          <el-radio-group v-model="ruleForm.lang">
+            <el-radio label="zh-cn">中文</el-radio>
+            <el-radio label="en-us">英文</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="涉及客户端：" prop="client">
+          <el-checkbox-group v-model="ruleForm.client" @change="changeClient">
+            <el-checkbox label="1" name="type">PC</el-checkbox>
+            <el-checkbox label="2" name="type">移动WEB</el-checkbox>
+            <el-checkbox label="3" name="type">APP</el-checkbox>
+          </el-checkbox-group>
+        </el-form-item>
+        <el-form-item label="PC链接：" prop="linkPC" v-if="ruleForm.client.indexOf('1') !== -1">
+          <el-input style="width: 310px" v-model="ruleForm.linkPC" placeholder="请输入PC链接"></el-input>
+          <div class="link-right">
+            <span>排列序号：</span>
+            <el-input style="width: 165px" v-model="ruleForm.indexPC" placeholder="请输入排列序号"></el-input>
           </div>
-        </el-card>
-      </el-col>
-      <el-col :span="8">
-        <el-card class="box-card counts2">
-          <div class="counts-header">
-            <div class="counts-header-left">
-              <svg-icon class="counts-header-svg" icon-class="peoples"></svg-icon>
-            </div>
-            <div class="counts-header-right">
-              <h2>
-                <vue-count :startVal="0" :endVal="onlineUser" :duration="2000"></vue-count>
-              </h2>
-              <p>在线人数</p>
-            </div>
+        </el-form-item>
+        <el-form-item label="WEB链接：" prop="linkWEB" v-if="ruleForm.client.indexOf('2') !== -1">
+          <el-input style="width: 310px" v-model="ruleForm.linkWEB" placeholder="请输入WEB链接："></el-input>
+          <div class="link-right">
+            <span>排列序号：</span>
+            <el-input style="width: 165px" v-model="ruleForm.indexWEB" placeholder="请输入排列序号"></el-input>
           </div>
-        </el-card>
-      </el-col>
-    </el-row>
-    <el-card style="margin-top: 30px;">
-      <div slot="header" class="clearfix">
-        <span>在线人数图表</span>
-      </div>
-      <div ref="chart" style="height: 300px;"></div>
-    </el-card>
+        </el-form-item>
+        <el-form-item label="APP链接：" prop="linkAPP" v-if="ruleForm.client.indexOf('3') !== -1">
+          <el-input style="width: 310px" v-model="ruleForm.linkAPP" placeholder="请输入APP链接"></el-input>
+          <div class="link-right">
+            <span>排列序号：</span>
+            <el-input style="width: 165px" v-model="ruleForm.indexAPP" placeholder="请输入排列序号"></el-input>
+          </div>
+        </el-form-item>
+        <el-form-item ref="images" class="images">
+          <upload-images v-for="(item, index) in imagesList" :url="imageUpload" :text="item.text" :index="index" :key="item.text" @success="imageSuccess" :src="item.src" v-if="item.show"></upload-images>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer" style="padding-right: 55px;">
+        <el-button @click="closeCreate">取 消</el-button>
+        <el-button type="success" @click="resetAdveert">重 置</el-button>
+        <el-button type="primary" @click="createAdveert">发 布</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import Moment from "moment";
-import { fetchData } from "@/api";
-import VueCount from "vue-count-to";
-import Cookies from "js-cookie";
-const eCharts = require("echarts");
+import url from '@/api/url'
+import Moment from 'moment'
+import { fetchData } from '@/api'
+import SearchMixin from '@/mixins/search'
+const isDev = process.env.NODE_ENV === 'development'
+import UploadImages from '@/components/Upload'
 export default {
+  mixins: [SearchMixin],
   components: {
-    VueCount
+    UploadImages
   },
   data() {
     return {
-      wallet: [],
-      balance: {
-        BTC: 0,
-        ETH: 0,
-        USDT: 0,
-        EOS: 0,
-        LTC: 0,
-        BCHABC: 0,
-        USDT_FEE: 0,
-        BTC_FEE: "",
-        ["USDT-ERC20"]: 0
+      list: [],
+      param: { // 请求附带参数
+        show: -1
       },
-
-      currency: {
-        "1": "BTC",
-        "2": "ETH",
-        "3": "USDT",
-        "4": "EOS",
-        "5": "LTC",
-        "10": "BCHABC",
-        "11": "TD",
-        "8": "BNB",
-        "13": "CRE",
-        "14": "EGT",
-        "15": "LAMB",
-        "16": "ARPA",
-        "17": "V91",
-        "109": "USDT-ERC20",
-        "1000": "USDT_FEE",
-        "1001": "BTC_FEE"
-      },
-      address: {
-        "1": "btc_account",
-        "2": "eth_account",
-        "3": "usdt_account",
-        "4": "eos_account",
-        "5": "ltc_account",
-        "10": "bch_account",
-        "11": "TD",
-        "8": "BNB",
-        "13": "CRE",
-        "14": "EGT",
-        "15": "LAMB",
-        "16": "ARPA",
-        "17": "V91",
-        "109": "USDT-ERC20",
-        "1000": "USDT_FEE",
-        "1001": "BTC_FEE"
-      },
-      addressPath: {},
-      newUser: 0,
-      onlineUser: 0,
-      activeTime: "",
-      btc_account: "",
-      eth_account: "",
-      usdt_account: "",
-      eos_account: "",
-      bch_account: "",
-      ltc_account: "",
-      usdt_fee_account: "",
-      eth_block: "",
-      weekProfit: [],
-      weekLoss: [],
+      requestUrl: 'bannerList',
+      imageUpload: isDev ? '/api' + url.imageUpload : url.imageUpload,
       dynamicTable: [
-        { name: "Index", label: "排名", width: 60 },
-        { name: "Uid", label: "UID", width: 120 },
-        { name: "Profit0", label: "本周(盈亏/成交量)" },
-        { name: "Profit1", label: "前一周" },
-        { name: "Profit2", label: "前二周" },
-        { name: "Profit3", label: "前三周" },
-        { name: "Profit4", label: "前四周" }
-      ]
-    };
+        { name: 'Title', value: true, label: '标题' },
+        { name: 'Lang', value: true, label: '语言' },
+        { name: 'Show', value: true, label: '状态' },
+        { name: 'Platform', value: true, label: '涉及客户端' },
+        { name: 'Createtime', value: true, label: '创建时间' }
+      ],
+      filterSummaries: [],
+      createVisible: false,
+      ruleForm: {
+        title: '',
+        lang: 'zh-cn',
+        client: ['1', '2', '3'],
+        linkPC: '',
+        linkWEB: '',
+        linkAPP: '',
+        indexPC: 0,
+        indexWEB: 0,
+        indexAPP: 0
+      },
+      rules: {
+        title: [
+          { required: true, message: '请输入标题', trigger: 'blur' }
+        ],
+        lang: [
+          { required: true, message: '请选择语言', trigger: 'change' }
+        ],
+        client: [
+          { required: true, message: '请选择客户端', trigger: 'change' }
+        ],
+        linkPC: [
+          { required: true, message: '请输入PC链接', trigger: 'blur' }
+        ],
+        linkWEB: [
+          { required: true, message: '请输入WEB链接', trigger: 'blur' }
+        ],
+        linkAPP: [
+          { required: true, message: '请输入APP链接', trigger: 'blur' }
+        ]
+      },
+      imagesList: [
+        { text: 'PC:1920*504', info: null, src: '', show: true },
+        { text: '移动web:750*252', info: null, src: '', show: true },
+        { text: 'ios:750*252', info: null, src: '', show: true },
+        { text: 'Android:1080*300', info: null, src: '', show: true }
+      ],
+      platformType: {
+        '1': 'PC',
+        '2': '移动WEB',
+        '3': 'APP'
+      },
+      editId: null,
+      editShow: 0,
+      filterValue: -1
+    }
   },
   methods: {
-    async createdFun() {
-      await this.getCoinInfo();
-      // await this.fetchCoinExplorer();
-      await this.fetchDashboard();
-      await this.fetchOnlineUser();
-      await this.fetchOnlineChart();
-      await this.fetchWeek();
+    // 设置表格数据
+    setTableData(data) {
+      const list = []
+      data.forEach(function(element) {
+        const Platform = []
+        element.Createtime = Moment(element.Createtime * 1000).format('YYYY-MM-DD HH:mm:ss')
+        element.Updatetime = Moment(element.Updatetime * 1000).format('YYYY-MM-DD HH:mm:ss')
+        element.TargetPc && Platform.push('1')
+        element.TargetApp && Platform.push('3')
+        element.TargetMobile && Platform.push('2')
+        element.Platform = Platform
+        list.push(element)
+      }, this)
+      this.list = list
     },
-    async getCoinInfo() {
-      await fetchData("coinInfo").then(data => {
-        var item = {};
-        var family = {};
-        var item2 = {};
-        for (let i in data.list) {
-          item[data.list[i].Id] = data.list[i].Code;
-          family[data.list[i].Id] = data.list[i].Family;
-          if (data.list[i].Id != 11 && data.list[i].Id < 100) {
-            item2[data.list[i].Id] = data.list[i].Code;
-          }
-        }
-        this.currencyNumber = item;
-        this.currencyFamily = family;
-        this.currentCoin = item2;
-        this.currentCoin[1101] = "TD-已锁定";
-        this.currentCoin[1102] = "TD-已解锁";
-      });
-      await fetchData("coinExplorer").then(data => {
-        this.addressPath = data.list;
-
-        for (let i in this.currencyNumber) {
-          if (this.addressPath[this.currencyNumber[i]] == undefined) {
-            this.addressPath[this.currencyNumber[i]] = this.addressPath[
-              this.currencyFamily[i]
-            ];
-          }
-          // console.log(this.addressPath[this.currencyNumber[i]])
-        }
-      });
+    // 创建广告
+    createAdveert() {
+      this.$refs.ruleForm.validate(valid => {
+        if (valid) this.submitAdveert()
+      })
+      // if (this.imagesList.some(item => item.info !== null)) {
+      //   this.$refs.ruleForm.validate(valid => {
+      //     if (valid) this.submitAdveert()
+      //   })
+      // } else {
+      //   this.$message.error('请上传图片')
+      // }
     },
-
-    // 获取钱包余额
-    fetchBalanceWallet() {
-      for (let key in this.currency) {
-        fetchData("balance", {
-          currency: key
-        }).then(data => {
-          if (data) {
-            var value = data.value.replace(/[^0-9]/gi, "");
-            console.log(value);
-            this.balance[this.currency[key]] = Number(value).toFixed(4);
-          }
-        });
-      }
-    },
-    // 获取在线人数
-    fetchOnlineUser() {
-      fetchData("userOnline").then(data => {
-        if (data) this.onlineUser = data.total;
-      });
-    },
-    // 获取新增用户
-    fetchNewUser() {
-      const start = new Date();
-      const end = new Date();
-      start.setTime(start.getTime() - 3600 * 1000 * 24 * 1);
-      fetchData("countsActive", {
-        start_time: parseInt(start / 1000),
-        end_time: parseInt(end.getTime() / 1000)
-      }).then(data => {
-        if (data) this.newUser = data.activated;
-      });
-    },
-    // 获取在线用户图表
-    fetchOnlineChart() {
-      const start = new Date();
-      const end = new Date();
-      start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-      fetchData("userOnlineChart", {
-        starttime: parseInt(start / 1000),
-        endtime: parseInt(end.getTime() / 1000)
-      }).then(data => {
-        if (data && data.list && data.list.length)
-          this.drawOnlineChart(data.list);
-      });
-    },
-
-    // 绘制在线图表
-    drawOnlineChart(list) {
-      const data = [];
-      list.forEach(function(element) {
-        data.push([
-          Moment(element.timestamp * 1000).format("YYYY-MM-DD HH:mm:ss"),
-          element.num
-        ]);
-      }, this);
-      const myChart = eCharts.init(this.$refs.chart);
-      const option = {
-        tooltip: {
-          trigger: "axis"
-        },
-        xAxis: {
-          data: data.map(item => item[0])
-        },
-        grid: {
-          left: 50
-        },
-        yAxis: {
-          splitLine: {
-            show: false
-          }
-        },
-        visualMap: {
-          top: 10,
-          right: 10,
-          pieces: [
-            {
-              gt: 0,
-              lte: 500,
-              color: "#096"
-            },
-            {
-              gt: 500,
-              lte: 1000,
-              color: "#ff9933"
-            },
-            {
-              gt: 1000,
-              color: "#cc0033"
-            }
-          ],
-          outOfRange: {
-            color: "#999"
-          }
-        },
-        dataZoom: [
-          {
-            startValue: data[parseInt(data.length / 2)][0]
-          },
-          {
-            type: "inside"
-          }
-        ],
-        series: {
-          name: "Online users ",
-          type: "line",
-          data: data.map(item => item[1])
-        }
-      };
-      myChart.setOption(option);
-    },
-    // 首页仪表盘
-    fetchDashboard() {
-      if (Cookies.get("dashboard") == undefined) {
-        //没有缓存就读接口，存在缓存就读缓存，缓存寿命10秒
-        fetchData("dashboard").then(data => {
-          var millisecond = new Date().getTime();
-          var expiresTime = new Date(millisecond + 10 * 1000);
-
-          Cookies.set("dashboard", JSON.stringify(data), {
-            expires: expiresTime
-          });
-          this.Dashboard(data);
-        });
+    // 提交广告
+    submitAdveert() {
+      if (this.editId) {
+        this.submitEdit()
       } else {
-        this.Dashboard(JSON.parse(Cookies.get("dashboard")));
+        this.submitAdd()
       }
     },
-    Dashboard(data) {
-      if (data && data.balance) {
-        for (let key in data.balance) {
-          var value = data.balance[key].replace(/[a-zA-Z]/g, "");
-          this.balance[this.currency[key]] = Number(value).toFixed(4);
-        }
-
-        this.newUser = data.users_new;
-        this.btc_account = data.btc_account;
-        this.eth_account = data.eth_account;
-        this.usdt_account = data.usdt_account;
-        this.eos_account = data.eos_account;
-        this.ltc_account = data.ltc_account;
-        this.bch_account = data.bch_account;
-        // this.usdt_fee_account = data.usdt_fee_account;
-
-        for (let i of Object.keys(this.currency)) {
-          if (i < 1000) {
-            var Commission;
-            var Address;
-            switch (i) {
-              case "3":
-                Commission = this.balance["BTC_FEE"] + " BTC";
-                break;
-              case "4":
-                Commission = this.balance["TD"] + " TD";
-                break;
-
-              default:
-                Commission = "";
-                break;
-            }
-            if (
-              i == 109 ||
-              i == 8 ||
-              i == 13 ||
-              i == 14 ||
-              i == 15 ||
-              i == 16 ||
-              i == 17
-            ) {
-              Address = data[this.address[2]];
-            } else if (i == 11) {
-              Address = data[this.address[4]];
-            } else {
-              Address = data[this.address[i]];
-            }
-
-            var m = {
-              Currency: this.currency[i],
-              Balance: this.balance[this.currency[i]],
-              Address: Address,
-              Commission: Commission,
-              Limit: data.currencyLimit[i]
-            };
-            this.wallet.push(m);
-          }
-        }
-        this.eth_block = parseInt(data.eth_block, 16);
-      }
-    },
-    // 盈利亏损
-    fetchWeek() {
-      fetchData("week", {
-        Currency: 1
+    // 提交编辑
+    submitEdit() {
+      fetchData('bannerEdit', {
+        id: this.editId,
+        title: this.ruleForm.title,
+        targetpc: this.ruleForm.client.indexOf('1') !== -1 ? this.ruleForm.linkPC : '',
+        targetapp: this.ruleForm.client.indexOf('3') !== -1 ? this.ruleForm.linkAPP : '',
+        targetmobile: this.ruleForm.client.indexOf('2') !== -1 ? this.ruleForm.linkWEB : '',
+        lang: this.ruleForm.lang,
+        show: this.editShow,
+        sortpc: this.ruleForm.indexPC,
+        sortapp: this.ruleForm.indexAPP,
+        sortmobile: this.ruleForm.indexWEB,
+        imagepc: this.imagesList[0].info ? this.imagesList[0].info.filename : this.imagesList[0].src,
+        imageweb: this.imagesList[1].info ? this.imagesList[1].info.filename : this.imagesList[1].src,
+        imageios: this.imagesList[2].info ? this.imagesList[2].info.filename : this.imagesList[2].src,
+        imageandroid: this.imagesList[3].info ? this.imagesList[3].info.filename : this.imagesList[3].src
       }).then(data => {
-        if (!data) return;
-        if (data.profit && data.profit.length) {
-          data.profit.map((v, i) => (v.Index = i + 1));
-          this.weekProfit = data.profit;
+        if (data) {
+          this.closeCreate()
+          this.fetchTableData()
         }
-        if (data.loss && data.loss.length) {
-          data.loss.map((v, i) => (v.Index = i + 1));
-          this.weekLoss = data.loss;
+      })
+    },
+    // 提交新建
+    submitAdd() {
+      fetchData('bannerAdd', {
+        title: this.ruleForm.title,
+        targetpc: this.ruleForm.linkPC,
+        targetapp: this.ruleForm.linkAPP,
+        targetmobile: this.ruleForm.linkWEB,
+        lang: this.ruleForm.lang,
+        show: 1,
+        sortpc: this.ruleForm.indexPC,
+        sortapp: this.ruleForm.indexAPP,
+        sortmobile: this.ruleForm.indexWEB,
+        imagepc: this.imagesList[0].info ? this.imagesList[0].info.filename : '',
+        imageweb: this.imagesList[1].info ? this.imagesList[1].info.filename : '',
+        imageios: this.imagesList[2].info ? this.imagesList[2].info.filename : '',
+        imageandroid: this.imagesList[3].info ? this.imagesList[3].info.filename : ''
+      }).then(data => {
+        if (data) {
+          this.closeCreate()
+          this.fetchTableData()
         }
-      });
+      })
+    },
+    // 关闭创建
+    closeCreate() {
+      this.resetAdveert()
+      this.editId = null
+      this.editShow = 0
+      this.createVisible = false
+    },
+    // 重置表单
+    resetAdveert() {
+      this.$refs.images.$children.forEach(item => {
+        item.clearFiles()
+      })
+      this.imagesList.map(val => {
+        val.info = null
+        val.src = ''
+      })
+      this.ruleForm = {
+        title: '',
+        lang: 'zh-cn',
+        client: ['1', '2', '3'],
+        linkPC: '',
+        linkWEB: '',
+        linkAPP: '',
+        indexPC: 0,
+        indexWEB: 0,
+        indexAPP: 0
+      }
+    },
+    // 编辑
+    handleEdit(index, row) {
+      this.ruleForm.title = row.Title
+      this.ruleForm.lang = row.Lang
+      this.ruleForm.linkPC = row.TargetPc
+      this.ruleForm.linkWEB = row.TargetMobile
+      this.ruleForm.linkAPP = row.TargetApp
+      this.ruleForm.indexPC = row.SortPc
+      this.ruleForm.indexWEB = row.SortMobile
+      this.ruleForm.indexAPP = row.SortApp
+      this.ruleForm.client = []
+      row.TargetPc && this.ruleForm.client.push('1')
+      row.TargetApp && this.ruleForm.client.push('3')
+      row.TargetMobile && this.ruleForm.client.push('2')
+      row.ImagePc && (this.imagesList[0].src = row.ImagePc)
+      row.ImageWeb && (this.imagesList[1].src = row.ImageWeb)
+      row.ImageIos && (this.imagesList[2].src = row.ImageIos)
+      row.ImageAndroid && (this.imagesList[3].src = row.ImageAndroid)
+      this.editId = row.Id
+      this.editShow = row.Show
+      this.changeClient()
+      this.createVisible = true
+    },
+    // 隐藏或显示
+    handleUnEnable(index, row) {
+      const item = row
+      fetchData('bannerEdit', {
+        id: item.Id,
+        show: !item.Show ? 1 : 0,
+        title: item.Title,
+        targetpc: item.TargetPc,
+        targetapp: item.TargetApp,
+        targetmobile: item.TargetMobile,
+        lang: item.Lang,
+        sortpc: item.SortPc,
+        sortapp: item.SortApp,
+        sortmobile: item.SortMobile,
+        imagepc: item.ImagePc,
+        imageweb: item.ImageWeb,
+        imageios: item.ImageIos,
+        imageandroid: item.ImageAndroid
+      }).then(data => {
+        if (data) this.list[index].Show = !item.Show
+      })
+    },
+    // 删除
+    handleDelete(index, row) {
+      this.$confirm('确定删除该广告吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        fetchData('bannerDel', {
+          id: row.Id,
+        }).then(data => {
+          if (data) this.list.splice(index, 1)
+        })
+      }).catch(err => console.log(err))
+    },
+    // 上传成功
+    imageSuccess(index, data) {
+      this.imagesList[index].info = data
+      this.imagesList[index].src = data ? data.filename : ''
+    },
+    // 筛选
+    filterStatus(val) {
+      this.param.show = val
+      this.fetchTableData()
+    },
+    // 
+    changeClient(val) {
+      if (this.ruleForm.client.indexOf('1') !== -1 && this.ruleForm.client.indexOf('2') !== -1 && this.ruleForm.client.indexOf('3') !== -1) {
+        this.imagesList.map(item => item.show = true)
+      } else if (this.ruleForm.client.indexOf('1') !== -1 && this.ruleForm.client.indexOf('2') !== -1) {
+        this.imagesList.map(item => item.show = false)
+        this.imagesList[0].show = true
+        this.imagesList[1].show = true
+      } else if (this.ruleForm.client.indexOf('1') !== -1 && this.ruleForm.client.indexOf('3') !== -1) {
+        this.imagesList.map(item => item.show = false)
+        this.imagesList[0].show = true
+        this.imagesList[2].show = true
+        this.imagesList[3].show = true
+      } else if (this.ruleForm.client.indexOf('2') !== -1 && this.ruleForm.client.indexOf('3') !== -1) {
+        this.imagesList.map(item => item.show = false)
+        this.imagesList[1].show = true
+        this.imagesList[2].show = true
+        this.imagesList[3].show = true
+      } else if (this.ruleForm.client.indexOf('1') !== -1) {
+        this.imagesList.map(item => item.show = false)
+        this.imagesList[0].show = true
+      } else if (this.ruleForm.client.indexOf('2') !== -1) {
+        this.imagesList.map(item => item.show = false)
+        this.imagesList[1].show = true
+      } else if (this.ruleForm.client.indexOf('3') !== -1) {
+        this.imagesList.map(item => item.show = false)
+        this.imagesList[2].show = true
+        this.imagesList[3].show = true
+      } else {
+        this.imagesList.map(item => item.show = false)
+      }
     }
-  },
-  created() {
-    this.createdFun();
   }
-};
+}
 </script>
 
-<style lang="less" scoped>
-.counts-header {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100px;
-  &-left {
-    flex: 0.4;
+<style lang="less">
+.demo-ruleForm {
+  padding-right: 35px;
+  .line {
+    padding: 0 5px;
   }
-  &-right {
-    flex: 0.6;
-    p {
-      color: #c8c8c8;
+  .link-right {
+    width: 240px;
+    float: right;
+    span {
+      font-weight: 600;
+      color: #333;
     }
   }
-  &-svg {
-    width: 4rem !important;
-    height: 4rem !important;
+  .images {
+    margin-bottom: 0;
+    .el-form-item__content {
+      overflow: hidden;
+      margin-left: 0 !important;
+      padding-left: 27px;
+      .public-uploader {
+        margin: 0;
+        &:nth-child(2n) {
+          padding-left: 20px;
+        }
+      }
+    }
   }
-}
-
-.gray {
-  color: #999;
-  font-size: 12px;
-}
-
-.box-card {
-  width: 410px;
-  a {
-    display: block;
-    line-height: 24px;
-  }
-}
-
-.counts1 {
-  color: rgb(45, 140, 240);
-}
-
-.counts2 {
-  color: rgb(100, 213, 114);
-}
-
-.counts3 {
-  color: rgb(255, 213, 114);
-}
-
-.counts4 {
-  color: rgb(242, 94, 67);
-}
-
-.recharge-rank {
-  margin: 30px 0;
 }
 </style>
+
 
