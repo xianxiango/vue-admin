@@ -244,45 +244,7 @@ export default {
       })
     },
     async createdFun() {
-      await this.getCoinInfo()
-      // await this.fetchCoinExplorer();
       await this.fetchTableData()
-    },
-    async getCoinInfo() {
-
-     await fetchData("coinInfo").then(data => {
-        var item = {};
-        var family = {}
-        var item2 = {};
-        for (let i in data.list) {
-          item[data.list[i].Id] = data.list[i].Code;
-          family[data.list[i].Id] = data.list[i].Family
-          if (data.list[i].Id != 11 && data.list[i].Id < 100) {
-            item2[data.list[i].Id] = data.list[i].Code;
-          }
-        }
-        this.currencyNumber = item;
-        this.currencyFamily = family
-        this.currentCoin = item2;
-        this.currentCoin[1101] = "TD-已锁定";
-        this.currentCoin[1102] = "TD-已解锁";
-      });
-
-      await fetchData("coinExplorer").then(data => {
-        this.addressPath = data.list;
-        // this.addressPath.XRP = { Address: "", Tx: "" };
-        // this.addressPath.CRE = this.addressPath.ETH;
-        // console.log(this.currencyNumber)
-        for (let i in this.currencyNumber) {
-
-          if (this.addressPath[this.currencyNumber[i]] == undefined) {
-            this.addressPath[this.currencyNumber[i]] = this.addressPath[this.currencyFamily[i]]
-          }
-          // console.log(this.addressPath[this.currencyNumber[i]])
-        }
-
-        // console.log(this.addressPath)
-      });
     },
 
     // 获取表格数据
@@ -442,79 +404,7 @@ export default {
 
       this.searchButtonBoolean = !this.searchButtonBoolean;
     },
-    pidHandler(item) {
-      var regu = /^(?![^a-zA-Z]+$)/;
-      if (regu.test(item)) {
-        return string62to10(item);
-      } else {
-        return item;
-      }
-    },
-    createdTimeHandler(item) {
-      // console.log(item)
-      const formatDate = item.split("~");
-      // console.log(formatDate)
-      this.searchParams.start_time = parseInt(
-        new Date(formatDate[0]).getTime() / 1000
-      );
-      this.searchParams.end_time = parseInt(
-        new Date(formatDate[1]).getTime() / 1000
-      );
-    },
-    sideHandler(item) {
-      if (item == "做空") {
-        return 1
-      } else {
-        return 0
-      }
-    },
-    coinHandler(item) {
-      // console.log(item)
-      const cmdId = Object.keys(this.currencyNumber).find(
-        val => this.currencyNumber[val] === item
-      );
-      // console.log(cmdId)
-      if (cmdId) {
-        return cmdId;
-      }
-    },
-    userTypeHandler(item) {
-      // console.log(item)
-      const cmdId = Object.keys(this.userType).find(
-        val => this.userType[val] === item
-      );
-      // console.log(cmdId)
-      if (cmdId) {
-        return cmdId;
-      }
-    },
-    spotBreedHandler(item) {
-
-      var array = item.split("/")
-
-      if (array[1]) {
-        var result = []
-        for (let key in this.currencyNumber) {
-          // console.log(this.currencyNumber[key], array[0])
-          if (this.currencyNumber[key] === array[0]) {
-            result.push(key)
-          }
-        }
-        for (let key in this.currencyNumber) {
-          if (this.currencyNumber[key] === array[1]) {
-            result.push(key)
-          }
-        }
-
-
-        if (result.length == 2) {
-          return result.join(",")
-        } else {
-          return "10000,10000"
-        }
-      }
-      return "10000,10000"
-    },
+    
     searchClear() {
       this.isSearch = false
       // this.searchHide()
