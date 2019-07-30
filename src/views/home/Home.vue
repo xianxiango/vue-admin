@@ -8,61 +8,56 @@
           icon="el-icon-circle-plus-outline"
           @click="createVisible = true"
         >新建</el-button>
+        <span class="left-span">
+          <span>状态：</span>
+          <el-select
+            style="width: 100px;"
+            v-model="filterValue"
+            placeholder="请选择"
+            @change="filterStatus"
+          >
+            <el-option label="全部" :value="-1"></el-option>
+            <el-option label="显示" :value="1"></el-option>
+            <el-option label="隐藏" :value="0"></el-option>
+          </el-select>
+        </span>
       </div>
     </div>
-    <!-- 表格  -->
-    <!-- <el-table
-      class="public-table"
-      :data="list"
-      border
-      v-loading="loading"
-      show-summary
-      @selection-change="handleSelectionChange"
-      :summary-method="getSummaries"
-    >
-      <el-table-column type="selection" width="60"></el-table-column>
-      <el-table-column
-        :prop="item.name"
-        v-if="item.value"
-        :key="item.name"
-        v-for="item in dynamicTable"
-        :label="item.label"
-        :show-overflow-tooltip="true"
-      >
-        <template slot-scope="scope">
-          <span v-if="item.name === 'state'">
-            <el-tag v-if="!scope.row.detail.Show" type="danger">已隐藏</el-tag>
-            <el-tag v-else type="success">已显示</el-tag>
-          </span>
-          <span v-else>
-            <span v-if="scope.row[item.name]!=0">{{scope.row[item.name]}}</span>
-            <span v-if="scope.row[item.name]==0">-</span>
-          </span>
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" align="center" width="240">
-        <template slot-scope="scope">
-          <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-          <el-button
-            v-if="!scope.row.detail.Show"
-            size="mini"
-            type="primary"
-            @click="handleUnEnable(scope.$index, scope.row)"
-          >显示</el-button>
-          <el-button
-            v-else
-            size="mini"
-            type="danger"
-            @click="handleUnEnable(scope.$index, scope.row)"
-          >隐藏</el-button>
-          <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>-->
-    <el-card class="box-card">
+
+    <el-card class="box-card image-box-card">
       <el-row :gutter="40">
-        <el-col :span="4" v-for="item in list" :key="item.Url">
-          <el-image style="width: 100%; height: 100%" :src="item.Url" :fit="fit"></el-image>
+        <el-col :span="4" v-for="item in list" :key="item.Url" class="box-card-child">
+          <div class="box-card-child-image">
+            <el-image class="child-image" :src="item.Url" fit="fill" lazy></el-image>
+          </div>
+
+          <div class="image-title">{{item.Title}}</div>
+          <el-button-group class="button-group">
+            <el-button class="edit-botton" type="primary" size="small" @click="handleEdit(item)">编辑</el-button>
+            <el-button
+              class="edit-botton"
+              type="success"
+              size="small"
+              @click="setIsShow(item,0)"
+              v-if="item.IsShow"
+            >显示</el-button>
+            <el-button
+              class="edit-botton"
+              type="info"
+              size="small"
+              @click="setIsShow(item,1)"
+              v-if="!item.IsShow"
+            >隐藏</el-button>
+          </el-button-group>
+          <el-button-group class="button-group">
+            <el-button class="edit-botton" type="danger" size="small" @click="handleDelete(item)">删除</el-button>
+            <el-button
+              class="edit-botton"
+              type="warning"
+              size="small"
+              @click="handleSetTop(item)"
+            >置顶</el-button>
+          </el-button-group>
         </el-col>
       </el-row>
     </el-card>
@@ -78,7 +73,12 @@
       layout="total, sizes, prev, pager, next, jumper"
     ></el-pagination>
     <!-- 新建活动  -->
-    <el-dialog :close-on-click-modal="false" :visible.sync="createVisible" width="707px">
+    <el-dialog
+      :close-on-click-modal="false"
+      :visible.sync="createVisible"
+      width="707px"
+      :show-close="false"
+    >
       <el-form
         :model="ruleForm"
         :rules="rules"
@@ -87,7 +87,7 @@
         class="demo-ruleForm"
       >
         <el-form-item label="标题" prop="title">
-          <el-input v-model="ruleForm.title" placeholder="请输图片标题"></el-input>
+          <el-input v-model="ruleForm.Title" placeholder="请输图片标题"></el-input>
         </el-form-item>
       </el-form>
       <el-upload
@@ -107,7 +107,7 @@
         </div>
         <i v-else class="el-icon-plus avatar-uploader-icon">上传图片</i>
       </el-upload>
-      <tinymce :height="200" v-model="ruleForm.content"></tinymce>
+      <tinymce :height="200" v-model="ruleForm.Content"></tinymce>
       <span slot="footer" class="dialog-footer" style="padding-right: 35px;">
         <el-button @click="closeCreate">取 消</el-button>
         <!-- <el-button type="success" @click="resetForm">重 置</el-button> -->
@@ -135,10 +135,18 @@ export default {
       list: [],
       period: "", // 搜索时间周期
       requestUrl: "advertList",
+      searchUrl: "advertSearch",
       param: {
         // 请求附带参数
+        module: 1,
+        isShow: -1
+      },
+      keyword: {
+        // 搜索附带参数
         module: 1
       },
+
+      filterValue: -1,
       imageLarge: "",
       imageSmall: "",
       imageLargeInfo: "",
@@ -148,12 +156,12 @@ export default {
       filterSummaries: [],
       createVisible: false,
       ruleForm: {
-        title: "",
-        content: ""
+        Title: "",
+        Content: ""
       },
       rules: {
-        title: [{ required: true, message: "请输入活动标题", trigger: "blur" }],
-        content: [
+        Title: [{ required: true, message: "请输入活动标题", trigger: "blur" }],
+        Content: [
           { required: true, message: "请输入图片详情", trigger: "blur" }
         ]
       },
@@ -166,17 +174,49 @@ export default {
       const list = [];
       data.forEach(function(element) {
         list.push({
+          ID: element.ID,
           Url: element.Url,
+          Title: element.Title,
+          IsShow: element.IsShow,
+          Content: element.Content,
+          Module: element.Module,
           detail: element
         });
       }, this);
       this.list = list;
     },
-
+    filterStatus(val) {
+      this.param.isShow = val;
+      this.fetchTableData();
+    },
     // 创建活动
     createActivity() {
       this.$refs.ruleForm.validate(valid => {
         if (valid) this.submitActivity();
+      });
+    },
+    // 提交活动
+    setIsShow(item, type) {
+      const params = {
+        id: item.ID,
+        isShow: type
+      };
+      fetchData("advertIsShow", params).then(data => {
+        if (data) {
+          // // this.resetForm();
+          // this.createVisible = false;
+          // if (this.editForm) {
+          //   this.editForm = null;
+          // }
+          // this.ruleForm = {
+          //   title: "",
+          //   content: ""
+          // };
+          // this.imageLarge = null;
+          // this.$refs.imageLarge.clearFiles();
+          this.fetchTableData();
+          // this.$Notification.success("编辑成功");
+        }
       });
     },
     // 提交活动
@@ -187,19 +227,19 @@ export default {
       }
       // 活动状态: 0 未开始, 1 已结束, 2 已取消, 3 进行中
       const params = {
-        title: this.ruleForm.title, // 标题
-        content: this.ruleForm.content, // 内容
+        title: this.ruleForm.Title, // 标题
+        content: this.ruleForm.Content, // 内容
         url: this.imageLarge, // 图片
         module: 1,
         isShow: 1 // 是否显示
       };
       if (this.editForm) {
-        params.id = this.editForm.Id;
+        params.id = this.editForm.ID;
         params.url = this.imageLarge;
-        params.isShow = this.editForm.isShow;
-        params.module = this.editForm.module;
-        params.title = this.editForm.title;
-        params.content = this.editForm.content;
+        params.isShow = this.editForm.IsShow;
+        // params.module = this.editForm.Module;
+        params.title = this.editForm.Title;
+        params.content = this.editForm.Content;
         fetchData("advertEdit", params).then(data => {
           if (data) {
             // this.resetForm();
@@ -248,19 +288,17 @@ export default {
         content: ""
       };
       if (this.imageLarge) {
+        var address = this.imageLarge.split("/");
         this.imageLarge = "";
         this.$refs.imageLarge.clearFiles();
-        if (this.imageLargeInfo) {
-          var address = this.imageLargeInfo.filename.split("/");
-          fetchData("imageDelete", {
-            id: address[address.length - 1]
-          }).then(data => {
-            if (data) {
-              this.imageLarge = null;
-              this.$refs.imageLarge.clearFiles();
-            }
-          });
-        }
+        fetchData("imageDelete", {
+          id: address[address.length - 1]
+        }).then(data => {
+          if (data) {
+            this.imageLarge = null;
+            this.$refs.imageLarge.clearFiles();
+          }
+        });
       }
     },
     // 重置表单
@@ -285,7 +323,7 @@ export default {
     // 上传PC图片成功
     handleLargeSuccess(res, file) {
       if (!res.code && res.data) {
-        this.imageLargeInfo = res.data;
+        // this.imageLargeInfo = res.data;
         // this.imageLarge = URL.createObjectURL(file.raw)
         this.imageLarge = res.data.filename;
       } else {
@@ -295,8 +333,9 @@ export default {
 
     // 移除图片
     handleLargeDelete(file, fileList) {
-      if (this.imageLargeInfo) {
-        var address = this.imageLargeInfo.filename.split("/");
+      if (this.imageLarge) {
+        var address = this.imageLarge.split("/");
+        // console.log(this.imageLarge);
         fetchData("imageDelete", {
           id: address[address.length - 1]
         }).then(data => {
@@ -313,49 +352,59 @@ export default {
       this.$message("当前已选中文件");
     },
     // 编辑
-    handleEdit(index, row) {
+    handleEdit(row) {
       this.editForm = row.detail;
-      this.ruleForm.title = row.detail.Title;
-      this.ruleForm.type = row.detail.AdType;
-      this.ruleForm.startTime = new Date(row.detail.BeginTime).getTime();
-      this.ruleForm.endTime =
-        parseInt(row.detail.EndTime) > 2000
-          ? new Date(row.detail.EndTime).getTime()
-          : "无限制";
-      this.ruleForm.lang = row.detail.Lang;
-      this.ruleForm.sort = row.detail.SortType;
-      this.ruleForm.link = row.detail.Url;
-      this.ruleForm.weight = row.detail.Sort;
-      if (row.detail.ImageLarge) {
-        this.imageLarge = row.detail.ImageLarge;
-        const item = row.detail.ImageLarge.split("/");
-        const id = item[item.length - 1].split(".");
-        this.imageLargeInfo = {
-          id: id[0]
-        };
-      }
-      if (row.detail.ImageSmall) {
-        this.imageSmall = row.detail.ImageSmall;
-        const item = row.detail.ImageSmall.split("/");
-        const id = item[item.length - 1].split(".");
-        this.imageSmallInfo = {
-          id: id[0]
-        };
-      }
+      this.ruleForm.Title = row.detail.Title;
+      this.ruleForm.Content = row.detail.Content;
+      this.imageLarge = row.detail.Url;
+      // if (row.detail.ImageLarge) {
+      //   this.imageLarge = row.detail.ImageLarge;
+      //   const item = row.detail.ImageLarge.split("/");
+      //   const id = item[item.length - 1].split(".");
+      //   this.imageLargeInfo = {
+      //     id: id[0]
+      //   };
+      // }
+      // if (row.detail.ImageSmall) {
+      //   this.imageSmall = row.detail.ImageSmall;
+      //   const item = row.detail.ImageSmall.split("/");
+      //   const id = item[item.length - 1].split(".");
+      //   this.imageSmallInfo = {
+      //     id: id[0]
+      //   };
+      // }
       this.createVisible = true;
     },
 
     // 删除
-    handleDelete(index, row) {
-      this.$confirm("确定删除该活动吗？", "提示", {
+    handleDelete(item) {
+      this.$confirm("确定删除该图片吗？", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       })
         .then(() => {
-          fetchData("advertDel", { id: row.detail.Id }).then(data => {
+          fetchData("advertDel", { id: item.ID }).then(data => {
             if (data) {
-              this.list.splice(index, 1);
+              this.fetchTableData();
+              this.$Notification.success("操作成功");
+            }
+          });
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    handleSetTop(item) {
+      this.$confirm("确定置顶该图片吗？", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          fetchData("advertSetTop", { id: item.ID,module:item.Module }).then(data => {
+            if (data) {
+              this.fetchTableData();
               this.$Notification.success("操作成功");
             }
           });
