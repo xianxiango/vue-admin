@@ -12,14 +12,7 @@ module.exports = {
         assetsPublicPath: '/',
         proxyTable: {
             '/api': {
-                // target: 'https://tadmin.tdex.com',
-                // target: 'https://tadmin.cryptogame.com',
-                // target: 'http://192.168.2.168:8889',
-                // target: 'http://192.168.2.200:8889',
-                // target:  'http://192.168.2.240:8889',
-                target: 'http://192.168.2.62:8881',
-
-                // target: 'https://mgr.tdex.com:5216',
+                target: 'http://192.168.1.108:8881',
                 changeOrigin: true,
                 pathRewrite: {
                     '^/api': ''
