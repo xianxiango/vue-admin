@@ -10,5 +10,7 @@ export default {
   'advertIsShow': '/gmn-admin/advert/isshow',
   'advertDel': '/gmn-admin/advert/del',
   'advertSetTop': '/gmn-admin/advert/settop',
+  'advertGetText': '/gmn-admin/advert/gettext',
+  'advertSetText': '/gmn-admin/advert/settext',
   
 }

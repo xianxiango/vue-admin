@@ -9,7 +9,7 @@ NProgress.configure({ showSpinner: false })
 // const isLogin = Cookies.get('auth')
 
 const currentHost = window.location.host.split('.')
-const hostConfig = "GMS"
+const hostConfig = "G.M.N"
 store.commit('SET_HOST_CONFIG', hostConfig)
 
 router.beforeEach((to, from, next) => {
