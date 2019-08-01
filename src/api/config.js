@@ -20,7 +20,7 @@ api.interceptors.response.use(
   response => {
     if (response.data.code) {
       if (response.data.code === 2) {
-        Cookies.remove('auth')
+        Cookies.remove('gmnauth')
         window.location.href = `${window.location.origin}/login`
         return false
       }

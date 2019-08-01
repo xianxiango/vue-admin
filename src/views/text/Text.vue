@@ -69,6 +69,22 @@ export default {
     getText() {
       fetchData("advertGetText").then(data => {
         if (data) {
+          for (let i in data.list) {
+            switch (data.list[i].Module) {
+              case 1:
+                this.sContent = data.list[i].Content;
+                break;
+              case 2:
+                this.nContent = data.list[i].Content;
+                break;
+              case 3:
+                this.oContent = data.list[i].Content;
+                break;
+              default:
+                break;
+            }
+          }
+          console.log(this.sContent, this.nContent, this.oContent);
         }
       });
     }

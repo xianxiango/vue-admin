@@ -7,6 +7,7 @@ import 'nprogress/nprogress.css'
 NProgress.configure({ showSpinner: false })
 
 // const isLogin = Cookies.get('auth')
+const isLogin = Cookies.get('gmnauth')
 
 const currentHost = window.location.host.split('.')
 const hostConfig = "G.M.N"
@@ -15,10 +16,22 @@ store.commit('SET_HOST_CONFIG', hostConfig)
 router.beforeEach((to, from, next) => {
   NProgress.start()
   if (!document.title && hostConfig) {
-    document.title = hostConfig
+    document.title = hostConfig.title
   }
-  
-  next()
+  if (!isLogin && to.path !== '/login') {
+    next('/login')
+    return false
+  }
+  if (!isLogin && to.path === '/login') {
+    next()
+    return false
+  }
+  if (isLogin && to.path === '/login') {
+    next('/')
+    return false
+  } else {
+    next()
+  }
 })
 
 router.afterEach(() => {

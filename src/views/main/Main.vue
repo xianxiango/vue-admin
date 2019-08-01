@@ -134,7 +134,7 @@ export default {
         this.$message.info('请输入密码')
         return false
       }
-      const auth = Cookies.get('auth')
+      const auth = Cookies.get('gmnauth')
       if (!auth) {
         this.$message.info('账号异常、请重新登录')
         return false
@@ -146,7 +146,7 @@ export default {
         new_psw: md5(this.newPsw)
       }).then(data => {
         if (data) {
-          Cookies.remove('auth')
+          Cookies.remove('gmnauth')
           Cookies.remove('password')
           window.location.href = `${window.location.origin}/login`
         }

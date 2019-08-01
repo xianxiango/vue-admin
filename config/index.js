@@ -17,7 +17,7 @@ module.exports = {
                 // target: 'http://192.168.2.168:8889',
                 // target: 'http://192.168.2.200:8889',
                 // target:  'http://192.168.2.240:8889',
-                target: 'http://192.168.2.67:8881',
+                target: 'http://192.168.2.66:8881',
 
                 // target: 'https://mgr.tdex.com:5216',
                 changeOrigin: true,
