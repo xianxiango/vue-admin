@@ -1,4 +1,4 @@
-# tdex-admin
+# vue-admin
 
 > A Vue.js project
 

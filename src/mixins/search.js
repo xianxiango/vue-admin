@@ -36,7 +36,7 @@ export default {
       loading: false,
       isSearch: false,
       inputText: '',
-      sizeList: [10, 20, 30, 40, 100, 1000, 10000],
+      sizeList: [7, 14, 28],
       multipleSelection: [],
       downloadLoading: false,
       searchShowOrHideText: "显示查询",

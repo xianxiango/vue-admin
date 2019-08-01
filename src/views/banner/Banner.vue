@@ -243,9 +243,10 @@ export default {
       if (this.editForm) {
         this.editForm = null;
       }
+      this.$refs.Tinymce.setHasChange();
       this.Title = "";
       this.Content = "";
-
+      
       this.imageLarge = null;
       this.$refs.imageLarge.clearFiles();
     },
