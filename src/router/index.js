@@ -40,7 +40,7 @@ export const constantRouter = [
         title: '优秀作品'
       }
     }]
-  }, 
+  },
   {
     path: '/course',
     component: Main,

@@ -2,6 +2,7 @@ export default {
   'adminLogin': '/gmn-admin/login', // 管理员登录
   'adminLogout': '/gmn-admin/loginout', // 管理员注销
   'imageUpload': '/gmn-admin/image/upload',
+  'imageUpload2': '/gmn-admin/image/upload2',
   'imageDelete': '/gmn-admin/image/delete',
   'advertEdit': '/gmn-admin/advert/edit',
   'advertAdd': '/gmn-admin/advert/add',

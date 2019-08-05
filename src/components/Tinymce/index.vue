@@ -10,7 +10,7 @@
 <script>
 import plugins from "./plugins";
 import toolbar from "./toolbar";
-
+import { fetchData } from "@/api";
 export default {
   name: "tinymce",
   props: {
@@ -89,6 +89,15 @@ export default {
         default_link_target: "_blank",
         link_title: false,
         nonbreaking_force_tab: true, // inserting nonbreaking space &nbsp; need Nonbreaking Space Plugin
+        images_upload_url: "/api/gmn-admin/image/upload2", //  图片上传地址
+        // images_upload_base_path: "/static/upload",
+        // images_upload_handler: function(blobInfo, success, failure) {
+        //   fetchData("imageUpload").then(data => {
+        //     if (data) {
+        //       success(data.filename)
+        //     }
+        //   });
+        // },
         init_instance_callback: editor => {
           if (_this.value) {
             editor.setContent(_this.value);
