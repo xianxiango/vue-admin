@@ -59,6 +59,23 @@ export const constantRouter = [
     }]
   },
   {
+    path: '/goodStudent',
+    component: Main,
+    redirect: 'goodStudent',
+    meta: {
+      title: '优秀学生',
+      icon: 'dashboard'
+    },
+    children: [{
+      path: 'goodStudent',
+      component: _import('goodStudent/GoodStudent'),
+      name: 'goodStudent',
+      meta: {
+        title: '优秀学生'
+      }
+    }]
+  },
+  {
     path: '/student',
     component: Main,
     redirect: 'student',
